@@ -83,17 +83,27 @@ function(me, args) {
 
         var bar = vis.add(pv.Bar)
             .data(vals)
-            .bottom(0)
+            .bottom(15)
             .width(19)
             .height(function(d) {return x(d);})
             .left(function() { return this.index * 24 + 5; })
+          .anchor("bottom").add(pv.Label)
+            .textMargin(-15)
+            .textAlign("left")
+            .textBaseline("middle")
+            .textAngle(-Math.PI / 2)
+            .text(function() { return labels[this.index];})
           .anchor("bottom").add(pv.Label)
             .textMargin(10)
             .textAlign("left")
             .textBaseline("middle")
             .textAngle(-Math.PI / 2)
-            .text(function() { return labels[this.index] + ": " +
-                               vals[this.index] + maybePercent(vals[this.index]); });
+            .text(function() { return vals[this.index] + maybePercent(vals[this.index]); });
+
+        vis.add(pv.Rule)
+            .bottom(15)
+            .left(24)
+            .right(6);
 
         vis.render();
     }
