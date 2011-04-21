@@ -23,6 +23,7 @@ function(head, req) {
                 alg: row.value.algorithm,
                 started: row.value.start_time,
                 n_servers: row.value.nodes.length,
+                n_iters: row.value.n_iters,
                 show: path.show('test', row.value._id)
             }));
         }
