@@ -7,12 +7,13 @@ import itertools
 
 import couchdb
 
-NUM_TESTS = 100000
+NUM_TESTS = 10000
 BATCH_SIZE = 1000
 
 NODE_FAILURE_PROBABILITY = 0.01
-NODES = 1024
+NODES = 100
 VBUCKETS = 1024
+REPLICAS = 2
 
 R = random.Random()
 
@@ -54,12 +55,14 @@ def buildNodes():
     for i in range(VBUCKETS):
         next(distribution_circle).active.append(i)
 
-    # next node in the circle gets the replica
-    distribution_circle = itertools.cycle(nodes)
+    for r in range(REPLICAS):
+        # next node in the circle gets the replica
+        distribution_circle = itertools.cycle(nodes)
 
-    next(distribution_circle)
-    for i in range(VBUCKETS):
-        next(distribution_circle).replica.append(i)
+        for i in range(r+1):
+            next(distribution_circle)
+        for i in range(VBUCKETS):
+            next(distribution_circle).replica.append(i)
 
     return nodes
 
@@ -94,10 +97,16 @@ def saveResults(db, nid, nodes, got, missing, alg):
 
 def simulate(db, nodes, nid, alg):
     fail = {True: 0, False: 0}
+    seen = []
     for n in nodes:
-        n.invariant()
+        assert n.invariant()
+        seen.extend(n.active)
+        seen.extend(n.replica)
         fail[n.maybeFail()] += 1
     print fail
+    for v,vc in itertools.groupby(sorted(seen)):
+        cnt = len(list(vc))
+        assert cnt == (REPLICAS + 1)
 
     l = sorted(set(flatten([flatten(n.available()) for n in nodes])))
     got = set(l)
@@ -124,6 +133,7 @@ def persistTest(db, nodes, nid, alg):
         'type': 'test',
         'nodes': nl,
         'n_iters': NUM_TESTS,
+        'n_replicas': REPLICAS,
         'start_time': datetime.datetime.now().isoformat()
         }
     db.save(doc)

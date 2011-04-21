@@ -24,6 +24,7 @@ function(head, req) {
                 started: row.value.start_time,
                 n_servers: row.value.nodes.length,
                 n_iters: row.value.n_iters,
+                n_replicas: row.value.n_replicas ? row.value.n_replicas : 1,
                 show: path.show('test', row.value._id)
             }));
         }

@@ -17,6 +17,7 @@ function(doc, req) {
         start_time: doc.start_time,
         _id: doc._id,
         n_nodes: doc.nodes.length,
+        n_replicas: doc.n_replicas ? doc.n_replicas : 1,
         n_vbuckets: vbcount,
         fail_prob: fail_prob
     };
