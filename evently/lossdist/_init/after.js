@@ -37,23 +37,9 @@ function(me, args) {
         total_runs += r.value;
     }
 
-    console.log(loss_dist_data);
-
     $("#iterations").html(total_runs);
 
     function showBar(named, data, total) {
-        var w = 200;
-        var h = 200;
-
-        var vis = new pv.Panel()
-            .canvas(named)
-            .width(w)
-            .height(h)
-            .bottom(20)
-            .left(20)
-            .right(10)
-            .top(5);
-
         var vals = [];
         var labels = [];
         var max = 0;
@@ -64,6 +50,21 @@ function(me, args) {
                 max = Math.max(max, data[i]);
             }
         }
+
+        console.log("Plotting " + labels.length + " values.");
+
+        var barWidth = 24;
+        var w = (barWidth + 5) * labels.length;
+        var h = 200;
+
+        var vis = new pv.Panel()
+            .canvas(named)
+            .width(w)
+            .height(h)
+            .bottom(20)
+            .left(20)
+            .right(10)
+            .top(5);
 
         var x = pv.Scale.linear(0, max).range(0, h);
         var y = pv.Scale.ordinal(pv.range(labels.length)).splitBanded(0, w, 4/5);
