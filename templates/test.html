@@ -1,0 +1,29 @@
+<h1>{{algorithm}} / {{start_time}}</h1>
+
+<p>
+  This test <span id="iterations">a lot of</span> iterations with
+  {{n_nodes}} nodes and {{n_vbuckets}} vbuckets.
+</p>
+
+<div id="testinfo"><div>
+
+<h2>Failure Distribution</h2>
+<div id="fail_dist">
+</div>
+
+<h2>Loss Distribution</h2>
+<div id="loss_dist">
+</div>
+
+<script src="../../js/prefix-loader.js"></script>
+<script type="text/javascript" charset="utf-8">
+  couchapp_prefix_load("../../");
+</script>
+<script type="text/javascript" src="../../js/protovis-r3.2.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $$("#testinfo").docid = '{{_id}}';
+  $.couch.app(function(app) {
+  $("#testinfo").evently("faildist", app);
+  });
+</script>
