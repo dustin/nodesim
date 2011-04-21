@@ -41,7 +41,7 @@ function(me, args) {
 
     $("#iterations").html(total_runs);
 
-    function showBar(named, data) {
+    function showBar(named, data, total) {
         var w = 200;
         var h = 200;
 
@@ -68,6 +68,18 @@ function(me, args) {
         var x = pv.Scale.linear(0, max).range(0, h);
         var y = pv.Scale.ordinal(pv.range(labels.length)).splitBanded(0, w, 4/5);
 
+        function maybePercent(n) {
+            if (total) {
+                var percent = (100 * n) / total;
+                var integerPart = Math.floor(percent);
+                var decimalPart = Math.floor((percent - integerPart) * 100);
+                var pstring = integerPart + "." + decimalPart;
+                return " (" + pstring + "%)";
+            } else {
+                return "";
+            }
+        }
+
         var bar = vis.add(pv.Bar)
             .data(vals)
             .bottom(0)
@@ -79,14 +91,15 @@ function(me, args) {
             .textAlign("left")
             .textBaseline("middle")
             .textAngle(-Math.PI / 2)
-            .text(function() { return labels[this.index] + ": " + vals[this.index]; });
+            .text(function() { return labels[this.index] + ": " +
+                               vals[this.index] + maybePercent(vals[this.index]); });
 
         vis.render();
     }
 
-    showBar('fail_dist', failure_data);
+    showBar('fail_dist', failure_data, total_runs);
     delete loss_dist_data[0];
-    showBar('loss_dist_chart', loss_dist_data);
+    showBar('loss_dist_chart', loss_dist_data, total_runs);
 
     for (var i = 0; i < failures.length; ++i) {
         var totalLost = 0;
@@ -101,7 +114,7 @@ function(me, args) {
         $("#worst_loss_" + i).html(worstLoss);
         if (totalLost > 0) {
             delete failures[i].losses[0];
-            showBar("loss_at_" + i, failures[i].losses);
+            showBar("loss_at_" + i, failures[i].losses, failures[i].total);
         } else {
             $("#loss_at_" + i).html("<p>No losses detected.</p>");
         }
