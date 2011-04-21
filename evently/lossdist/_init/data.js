@@ -11,6 +11,7 @@ function(data) {
         var old = failures[k[1]];
         if (!old) {
             old = {
+                size: k[1],
                 total: 0,
                 losses: {}
             };

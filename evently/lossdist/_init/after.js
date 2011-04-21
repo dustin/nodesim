@@ -5,7 +5,6 @@ function(me, args) {
     var failures = [];
     var failure_data = [];
     var total_runs = 0;
-    var max = 0;
 
     // Make sure failure data is filled in even when there's no data
     // for a position.
@@ -20,7 +19,7 @@ function(me, args) {
         if (!old) {
             old = {
                 total: 0,
-                losses: {}
+                losses: []
             };
             failures[k[1]] = old;
         }
@@ -29,38 +28,55 @@ function(me, args) {
         failure_data[k[1]] = failure_data[k[1]] + r.value;
 
         total_runs += r.value;
-        max = Math.max(max, me.rows[i].value);
     }
 
     $("#iterations").html(total_runs);
 
-    var w = 200;
-    var h = 200;
+    function showBar(named, data) {
+        var w = 200;
+        var h = 200;
 
-    var vis = new pv.Panel()
-        .canvas('fail_dist')
-        .width(w)
-        .height(h)
-        .bottom(20)
-        .left(20)
-        .right(10)
-        .top(5);
+        var vis = new pv.Panel()
+            .canvas(named)
+            .width(w)
+            .height(h)
+            .bottom(20)
+            .left(20)
+            .right(10)
+            .top(5);
 
-    var x = pv.Scale.linear(0, max).range(0, h);
-    var y = pv.Scale.ordinal(pv.range(failure_data.length)).splitBanded(0, w, 4/5);
+        var vals = [];
+        var labels = [];
+        var max = 0;
+        for (var i = 0; i < data.length; ++i) {
+            if (data[i]) {
+                labels.push(i);
+                vals.push(data[i]);
+                max = Math.max(max, data[i]);
+            }
+        }
 
-    var bar = vis.add(pv.Bar)
-        .data(failure_data)
-        .bottom(0)
-        .width(19)
-        .height(function(d) {return x(d);})
-        .left(function() { return this.index * 24 + 5; })
-      .anchor("bottom").add(pv.Label)
-        .textMargin(10)
-        .textAlign("left")
-        .textBaseline("middle")
-        .textAngle(-Math.PI / 2)
-        .text(function() { return this.index + ": " + failure_data[this.index]; });
+        var x = pv.Scale.linear(0, max).range(0, h);
+        var y = pv.Scale.ordinal(pv.range(labels.length)).splitBanded(0, w, 4/5);
 
-    vis.render();
+        var bar = vis.add(pv.Bar)
+            .data(vals)
+            .bottom(0)
+            .width(19)
+            .height(function(d) {return x(d);})
+            .left(function() { return this.index * 24 + 5; })
+          .anchor("bottom").add(pv.Label)
+            .textMargin(10)
+            .textAlign("left")
+            .textBaseline("middle")
+            .textAngle(-Math.PI / 2)
+            .text(function() { return labels[this.index] + ": " + vals[this.index]; });
+
+        vis.render();
+    }
+
+    showBar('fail_dist', failure_data);
+    for (var i = 0; i < failures.length; ++i) {
+        showBar("loss_at_" + i, failures[i].losses);
+    }
 }

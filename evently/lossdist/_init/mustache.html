@@ -1,14 +1,8 @@
-<table id="loss">
-  <tr>
-    <th>Node Failures</th>
-    <th>Lost VBuckets</th>
-    <th>Count</th>
-  </tr>
-{{#results}}
-  <tr>
-    <td>{{failures}}</td>
-    <td>{{loss}}</td>
-    <td>{{count}}</td>
-  </tr>
-{{/results}}
-</table>
+{{#by_failures}}
+<h2>With {{size}} Nodes Failing</h2>
+<p>
+  There were {{total}} incidents of {{size}} nodes failing.  This is
+  how many vbuckets we lost among them.
+</p>
+<div id="loss_at_{{size}}"></div>
+{{/by_failures}}
