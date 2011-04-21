@@ -41,7 +41,9 @@ function(me, args) {
         .textMargin(10)
         .textAlign("left")
         .textBaseline("middle")
-        .textAngle(-Math.PI / 2);
+        .textAngle(-Math.PI / 2)
+        .text(function() { var r = me.rows[this.index];
+                           return r.key[1] + ": " + r.value; });
 
     /* The variable label. */
     // bar.anchor("bottom").add(pv.Label)
