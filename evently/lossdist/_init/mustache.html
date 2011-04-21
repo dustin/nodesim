@@ -1,8 +1,24 @@
+<p>
+  We had a worst case of {{worst_loss}} lost vbuckets.  Excluding the
+  runs where we lost no data, our remaining loss distribution looked
+  like this:
+</p>
+<div id="loss_dist_chart"></div>
+
 {{#by_failures}}
 <h2>With {{size}} Nodes Failing</h2>
 <p>
-  There were {{total}} incidents of {{size}} nodes failing.  This is
-  how many vbuckets we lost among them.
+  There were {{total}} incidents of {{size}} nodes failing.  In the
+  worst case, we lost <span id="worst_loss_{{size}}">a few</span>
+  vbuckets.
+</p>
+
+<p>
+  This chart shows the number of times we lost the given number of
+  vbuckets.  A total
+  of <span id="loss_count_{{size}}">something</span> vbuckets were
+  lost during these {{total}} tests.  For scaling purposes, these
+  charts do not show when no items are lost.
 </p>
 <div id="loss_at_{{size}}"></div>
 {{/by_failures}}

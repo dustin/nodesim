@@ -4,12 +4,17 @@ function(me, args) {
 
     var failures = [];
     var failure_data = [];
+    var loss_dist_data = [];
     var total_runs = 0;
 
     // Make sure failure data is filled in even when there's no data
     // for a position.
      for (var i = 0; i <= me.rows[me.rows.length-1].key[1]; ++i) {
         failure_data[i] = 0;
+    }
+
+    function addTo(a, b) {
+        return (a?a:0) + (b?b:0);
     }
 
     for (var i = 0; i < me.rows.length; ++i) {
@@ -27,8 +32,12 @@ function(me, args) {
         failures[k[1]].losses[k[2]] = r.value;
         failure_data[k[1]] = failure_data[k[1]] + r.value;
 
+        loss_dist_data[k[2]] = addTo(loss_dist_data[k[2]], r.value);
+
         total_runs += r.value;
     }
+
+    console.log(loss_dist_data);
 
     $("#iterations").html(total_runs);
 
@@ -76,7 +85,25 @@ function(me, args) {
     }
 
     showBar('fail_dist', failure_data);
+    delete loss_dist_data[0];
+    showBar('loss_dist_chart', loss_dist_data);
+
     for (var i = 0; i < failures.length; ++i) {
-        showBar("loss_at_" + i, failures[i].losses);
+        var totalLost = 0;
+        var worstLoss = 0;
+        for (var j = 1; j < failures[i].losses.length; ++j) {
+            if (failures[i].losses[j]) {
+                totalLost += failures[i].losses[j];
+                worstLoss = Math.max(worstLoss, j);
+            }
+        }
+        $("#loss_count_" + i).html(totalLost);
+        $("#worst_loss_" + i).html(worstLoss);
+        if (totalLost > 0) {
+            delete failures[i].losses[0];
+            showBar("loss_at_" + i, failures[i].losses);
+        } else {
+            $("#loss_at_" + i).html("<p>No losses detected.</p>");
+        }
     }
 }

@@ -4,6 +4,7 @@ function(data) {
 
     var failures = [];
     var total_runs = 0;
+    var worst_loss = 0;
 
     for (var i = 0; i < data.rows.length; ++i) {
         var r = data.rows[i];
@@ -20,11 +21,13 @@ function(data) {
         failures[k[1]].total = old.total + r.value;
         failures[k[1]].losses[k[2]] = r.value;
         total_runs += r.value;
+        worst_loss = Math.max(worst_loss, k[2]);
     }
 
     return {
         total_runs: total_runs,
         by_failures: failures,
+        worst_loss: worst_loss,
         results: data.rows.map(function(r) {
             var k = r.key;
             var count = r.value;
