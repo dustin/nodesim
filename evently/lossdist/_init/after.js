@@ -51,8 +51,6 @@ function(me, args) {
             }
         }
 
-        console.log("Plotting " + labels.length + " values.");
-
         var barWidth = 24;
         var w = (barWidth + 5) * labels.length;
         var h = 200;
@@ -88,7 +86,10 @@ function(me, args) {
             .height(function(d) {return x(d);})
             .left(function() { return this.index * 24 + 5; })
           .anchor("bottom").add(pv.Label)
-            .textMargin(-15)
+            .textMargin(function(d) {
+                var v = labels[this.index];
+                var mag = Math.floor(Math.log(Math.max(2, v)) / Math.log(10));
+                return -8 * (1 + mag);})
             .textAlign("left")
             .textBaseline("middle")
             .textAngle(-Math.PI / 2)
