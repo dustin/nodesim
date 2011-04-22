@@ -13,6 +13,9 @@ function(data) {
         if (!old) {
             old = {
                 size: k[1],
+                link: path.list('failures', 'find_missing', {startkey: [k[0], k[1]],
+                                                             endkey: [k[0], k[1] + 1],
+                                                             reduce: false}),
                 total: 0,
                 losses: {}
             };
