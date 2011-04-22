@@ -110,7 +110,6 @@ function(me, args) {
     }
 
     showBar('fail_dist', failure_data, total_runs);
-    delete loss_dist_data[0];
     showBar('loss_dist_chart', loss_dist_data, total_runs);
 
     for (var i = 0; i < failures.length; ++i) {
@@ -126,7 +125,6 @@ function(me, args) {
             $("#loss_count_" + i).html(totalLost);
             $("#worst_loss_" + i).html(worstLoss);
             if (totalLost > 0) {
-                delete failures[i].losses[0];
                 showBar("loss_at_" + i, failures[i].losses, failures[i].total);
             } else {
                 $("#loss_at_" + i).html("<p>No losses detected.</p>");
