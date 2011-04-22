@@ -127,6 +127,7 @@ function(me, args) {
             if (totalLost > 0) {
                 showBar("loss_at_" + i, failures[i].losses, failures[i].total);
             } else {
+                $("#failure_reports_" + i).hide();
                 $("#loss_at_" + i).html("<p>No losses detected.</p>");
             }
         }
