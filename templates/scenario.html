@@ -48,7 +48,6 @@ var vis = new pv.Panel()
     .height(h);
 
 function colorize(d) {
-  console.log("Colorizing " + this.index);
   if (this.index in contributing_nodes) {
     return 'red'; 
   } else if (this.index in failed_nodes) {
