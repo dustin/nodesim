@@ -1,0 +1,16 @@
+<h1>{{title}} (test {{test}})</h1>
+
+<p>
+  Looks like we lost {{n_missing}} vbuckets:
+</p>
+<p class="vblist"c>
+  [{{#missing}}{{.}}, {{/missing}}]
+</p>
+
+{{#failed}}
+<h2>Node {{id}} Failed</h2>
+<h3>Active VBuckets</h3>
+<p class="vblist">[{{#active}}{{.}}, {{/active}}]</p>
+<h3>Replica VBuckets</h3>
+<p class="vblist">[{{#replica}}{{.}}, {{/replica}}]</p>
+{{/failed}}
