@@ -6,7 +6,7 @@ function(doc, req) {
     var missing = doc.missing.map(function (x) { return parseInt(x); });
     missing.sort(function(a, b) {return parseInt(a) - parseInt(b);});
 
-    var nodes_contributing = [];
+    var nodes_contributing_obs = {};
     function contains(n, h) {
         for (var i = 0; i < h.length; ++i) {
             if (h[i] === n) {
@@ -19,11 +19,16 @@ function(doc, req) {
         for (var m = 0; m < missing.length; ++m) {
             if (contains(missing[m], doc.failed[i].active) ||
                 contains(missing[m], doc.failed[i].replica)) {
-                nodes_contributing.push(doc.failed[i].id);
-                continue;
+                nodes_contributing_obs[parseInt(doc.failed[i].id)] = true;
             }
         }
     }
+
+    var nodes_contributing = [];
+    for (var n in nodes_contributing_obs) {
+        nodes_contributing.push(n);
+    }
+    nodes_contributing.sort(function(a, b){return a - b;});
 
     var data = {
         title: doc.n_dead_nodes + ' out of ' + doc.n_nodes + ' Causing Data Loss',
