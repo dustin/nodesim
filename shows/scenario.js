@@ -12,8 +12,8 @@ function(doc, req) {
             if (h[i] === n) {
                 return true;
             }
-            return false;
         }
+        return false;
     }
     for (var i = 0; i < doc.failed.length; ++i) {
         for (var m = 0; m < missing.length; ++m) {
