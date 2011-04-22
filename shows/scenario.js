@@ -17,6 +17,7 @@ function(doc, req) {
         test: doc.test,
         missing: missing,
         n_missing: missing.length,
+        test_link: path.show('test', doc.test),
         _id: doc._id
     };
 

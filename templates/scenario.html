@@ -1,16 +1,26 @@
-<h1>{{title}} (test {{test}})</h1>
+<h1>{{title}}</h1>
+
+<style type="text/css">
+  {{#missing}}
+  .vb_{{.}} { color: red; }
+  {{/missing}}
+</style>
 
 <p>
   Looks like we lost {{n_missing}} vbuckets:
 </p>
-<p class="vblist"c>
-  [{{#missing}}{{.}}, {{/missing}}]
+<p class="vblist">
+  [{{#missing}}<span class="vb_{{.}}">{{.}}</span>, {{/missing}}]
 </p>
 
 {{#failed}}
 <h2>Node {{id}} Failed</h2>
 <h3>Active VBuckets</h3>
-<p class="vblist">[{{#active}}{{.}}, {{/active}}]</p>
+<p class="vblist">[{{#active}}<span class="vb_{{.}}">{{.}}</span>, {{/active}}]</p>
 <h3>Replica VBuckets</h3>
-<p class="vblist">[{{#replica}}{{.}}, {{/replica}}]</p>
+<p class="vblist">[{{#replica}}<span class="vb_{{.}}">{{.}}</span>, {{/replica}}]</p>
 {{/failed}}
+
+<p>
+  <a href="{{test_link}}">back to the test</a>
+</p>
