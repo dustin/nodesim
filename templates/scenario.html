@@ -4,6 +4,9 @@
   {{#missing}}
   .vb_{{.}} { color: red; }
   {{/missing}}
+  {{#nodes_contributing}}
+  .node_{{.}} { color: red; }
+  {{/nodes_contributing}}
 </style>
 
 <p>
@@ -14,7 +17,7 @@
 </p>
 
 {{#failed}}
-<h2>Node {{id}} Failed</h2>
+<h2 class="node_{{id}}">Node {{id}} Failed</h2>
 <h3>Active VBuckets</h3>
 <p class="vblist">[{{#active}}<span class="vb_{{.}}">{{.}}</span>, {{/active}}]</p>
 <h3>Replica VBuckets</h3>
