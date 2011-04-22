@@ -9,6 +9,73 @@
   {{/nodes_contributing}}
 </style>
 
+<script src="../../js/prefix-loader.js"></script>
+<script type="text/javascript" charset="utf-8">
+  couchapp_prefix_load("../../");
+</script>
+<script type="text/javascript" src="../../js/protovis-r3.2.js"></script>
+
+<div id="fig">
+    <script type="text/javascript">
+
+var data = [];
+for (var i = 0; i < {{{n_nodes}}}; ++i) {
+  data.push(1);
+};
+
+var failed_nodes = {
+  {{#failed}}
+    {{id}}: true,    
+  {{/failed}}
+    undefined: false
+};
+var contributing_nodes = {
+  {{#nodes_contributing}}
+    {{.}}: true,    
+  {{/nodes_contributing}}
+    undefined: false
+};
+
+/* Sizing and scales. */
+var w = 400,
+    h = 400,
+    r = w / 2,
+    a = pv.Scale.linear(0, pv.sum(data)).range(0, 2 * Math.PI);
+
+/* The root panel. */
+var vis = new pv.Panel()
+    .width(w)
+    .height(h);
+
+function colorize(d) {
+  console.log("Colorizing " + this.index);
+  if (this.index in contributing_nodes) {
+    return 'red'; 
+  } else if (this.index in failed_nodes) {
+    return '#900';
+  } else {
+    return '#999';
+  }
+};
+
+/* The wedge, with centered label. */
+vis.add(pv.Wedge)
+    .data(data)
+    .bottom(w / 2)
+    .left(w / 2)
+    .innerRadius(r - 40)
+    .outerRadius(r)
+    .angle(a)
+    .fillStyle(colorize)
+  .anchor("center").add(pv.Label)
+    .font('8px')
+    .text(function(d) { return this.index;});
+
+vis.render();
+
+    </script>
+  </div>
+
 <p>
   Looks like we lost {{n_missing}} vbuckets:
 </p>
