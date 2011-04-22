@@ -76,10 +76,13 @@ vis.render();
   </div>
 
 <p>
-  Looks like we lost {{n_missing}} vbuckets:
+  In this scenario, a {{n_dead_nodes}} (out of {{n_nodes}}) node
+  failure resulted in the complete loss of {{n_missing}} vbuckets.
+  {{n_nodes_contributing}} of these failures combined to result in
+  data loss.
 </p>
 <p class="vblist">
-  [{{#missing}}<span class="vb_{{.}}">{{.}}</span>, {{/missing}}]
+  Missing vbuckets:  [{{#missing}}<span class="vb_{{.}}">{{.}}</span>, {{/missing}}]
 </p>
 
 {{#failed}}

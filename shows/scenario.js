@@ -26,7 +26,7 @@ function(doc, req) {
     }
 
     var data = {
-        title: 'Scenario ' + doc._id,
+        title: doc.n_dead_nodes + ' out of ' + doc.n_nodes + ' Causing Data Loss',
         mainid: 'scenario',
         n_alive_nodes: doc.n_alive_nodes,
         failed: doc.failed,
@@ -37,6 +37,7 @@ function(doc, req) {
         missing: missing,
         n_missing: missing.length,
         nodes_contributing: nodes_contributing,
+        n_nodes_contributing: nodes_contributing.length,
         test_link: path.show('test', doc.test),
         _id: doc._id
     };
