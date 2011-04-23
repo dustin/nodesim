@@ -19,11 +19,15 @@
 // });
 
 (function($) {
-  
+
   function Design(db, name) {
     this.doc_id = "_design/"+name;
     this.view = function(view, opts) {
-      db.view(name+'/'+view, opts);
+      if (view.indexOf('/') === -1) {
+        db.view(name+'/'+view, opts);
+      } else {
+        db.view(view, opts);
+      }
     };
     this.list = function(list, view, opts) {
       db.list(name+'/'+list, view, opts);
