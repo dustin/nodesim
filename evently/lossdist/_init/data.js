@@ -6,6 +6,8 @@ function(data) {
     var total_runs = 0;
     var worst_loss = 0;
 
+    console.log("Got some data...");
+    console.log(data);
     for (var i = 0; i < data.rows.length; ++i) {
         var r = data.rows[i];
         var k = r.key;
