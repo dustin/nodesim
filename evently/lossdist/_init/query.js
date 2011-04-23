@@ -1,7 +1,7 @@
 function() {
     var docid = $$("#testinfo").docid;
     return {
-        view : "counts",
+        view : "indexes/counts",
         endkey : [docid, {}],
         startkey : [docid],
         group: true,
