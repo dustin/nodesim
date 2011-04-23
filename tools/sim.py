@@ -7,13 +7,13 @@ import itertools
 
 import couchdb
 
-NUM_TESTS = 10000
+NUM_TESTS = 1000
 BATCH_SIZE = 1000
 
-NODE_FAILURE_PROBABILITY = 0.01
-NODES = 100
+NODE_FAILURE_PROBABILITY = 0.02
+NODES = 10
 VBUCKETS = 1024
-REPLICAS = 2
+REPLICAS = 1
 
 R = random.Random()
 
@@ -140,7 +140,7 @@ def persistTest(db, nodes, nid, alg):
 
 
 if __name__ == '__main__':
-    db = couchdb.Server('http://127.0.0.1:5984/')['test']
+    db = couchdb.Server('http://127.0.0.1:5984/')['test2']
     nodes = buildNodes()
 
     nid = str(uuid.uuid1())
