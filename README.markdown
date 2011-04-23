@@ -8,6 +8,15 @@ of failures in distributed systems to help guide topology decisions.
 - CouchDB for python (easy_install couchdb)
 - couchapp tool (easy_install couchapp)
 
+## Erlang Views
+
+I'm using erlang-based views here.  The erlang view engine is disabled
+by default.  In order to enable it, add the following to your
+`local.ini`:
+
+    [native_query_servers]
+    erlang = {couch_native_process, start_link, []}
+
 # Running
 
 Ensure the couchapp is installed:
