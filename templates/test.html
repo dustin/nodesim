@@ -22,10 +22,10 @@
   couchapp_prefix_load("../../");
 </script>
 <script type="text/javascript" src="../../js/protovis-r3.2.js"></script>
+<script type="text/javascript" src="../../js/lossdist.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-  $$("#testinfo").docid = '{{_id}}';
   $.couch.app(function(app) {
-  $("#loss_dist").evently("lossdist", app);
+    lossDistQuery(app, '{{_id}}');
   });
 </script>
