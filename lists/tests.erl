@@ -19,13 +19,13 @@ function(head, req) {
 
         while(row = getRow()) {
             send(Mustache.to_html(templates.sim, {
-                id: row.value._id,
-                alg: row.value.algorithm,
-                started: row.value.start_time,
-                n_servers: row.value.nodes.length,
-                n_iters: row.value.n_iters,
-                n_replicas: row.value.n_replicas ? row.value.n_replicas : 1,
-                show: path.show('test', row.value._id)
+                id: row.id,
+                alg: row.doc.algorithm,
+                started: row.doc.start_time,
+                n_servers: row.doc.nodes.length,
+                n_iters: row.doc.n_iters,
+                n_replicas: row.doc.n_replicas ? row.doc.n_replicas : 1,
+                show: path.show('test', row.id)
             }));
         }
         send("</ul>");
