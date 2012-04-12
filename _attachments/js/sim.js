@@ -75,9 +75,7 @@ function junkify(someClass) {
         var range = 16;
         var origContent = e.innerHTML;
         e.title = "data: "+ origContent;
-        var d = _(origContent.split(",")).map(function(x) {
-            return parseInt(x, 10);
-        }),
+        var d = _(origContent.split(",")).map(function(x) {return parseInt(x, 10);}),
             max = _.max(d), min = _.min(d),
             dataRange = max-min;
 
