@@ -7,15 +7,15 @@ import itertools
 
 import couchdb
 
-NUM_TESTS = 10000
+NUM_TESTS = 100000
 BATCH_SIZE = 1000
 
 NODE_FAILURE_PROBABILITY = 0.01
 NODES = 15
 VBUCKETS = 1024
 REPLICAS = 1
+# adjacent, least
 ALG = 'least'
-
 
 R = random.Random()
 
@@ -180,14 +180,15 @@ def persistTest(db, nodes, nid, alg):
     db.save(doc)
 
 
+ALGS = {
+    'least': buildNodesLeast,
+    'wide': buildNodesWide,
+    'adjacent': buildNodesAdjacent
+    }
+
 if __name__ == '__main__':
     db = couchdb.Server('http://127.0.0.1:5984/')['test']
-    algs = {
-        'least': buildNodesLeast,
-        'wide': buildNodesWide,
-        'adjacent': buildNodesAdjacent
-        }
-    nodes = algs[ALG]()
+    nodes = ALGS[ALG]()
 
     nid = str(uuid.uuid1())
     persistTest(db, nodes, nid, ALG)
