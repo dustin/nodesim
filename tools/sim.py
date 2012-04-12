@@ -7,6 +7,9 @@ import itertools
 
 import couchdb
 
+COUCH_SERVER = 'http://127.0.0.1:5984/'
+COUCH_DB = 'simulation'
+
 NUM_TESTS = 100000
 BATCH_SIZE = 1000
 
@@ -187,7 +190,7 @@ ALGS = {
     }
 
 if __name__ == '__main__':
-    db = couchdb.Server('http://127.0.0.1:5984/')['test']
+    db = couchdb.Server(COUCH_SERVER)[COUCH_DB]
     nodes = ALGS[ALG]()
 
     nid = str(uuid.uuid1())
