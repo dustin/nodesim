@@ -11,9 +11,11 @@ NUM_TESTS = 10000
 BATCH_SIZE = 1000
 
 NODE_FAILURE_PROBABILITY = 0.01
-NODES = 100
+NODES = 15
 VBUCKETS = 1024
-REPLICAS = 2
+REPLICAS = 1
+ALG = 'least'
+
 
 R = random.Random()
 
@@ -47,7 +49,7 @@ class Node(object):
 def flatten(lists):
     return list(itertools.chain(*lists))
 
-def buildNodes():
+def buildNodesAdjacent():
     nodes = [Node(x) for x in range(NODES)]
 
     # Layout active
@@ -63,6 +65,45 @@ def buildNodes():
             next(distribution_circle)
         for i in range(VBUCKETS):
             next(distribution_circle).replica.append(i)
+
+    return nodes
+
+def buildNodesWide():
+    nodes = [Node(x) for x in range(NODES)]
+
+    # Layout active
+    distribution_circle = itertools.cycle(nodes)
+    for i in range(VBUCKETS):
+        next(distribution_circle).active.append(i)
+
+    # Layout replicas, spread 'em all around
+    for n in nodes:
+        for i in range(REPLICAS):
+            for v in n.active:
+                target = next(distribution_circle)
+                while v in target.active or v in target.replica:
+                    target = next(distribution_circle)
+                target.replica.append(v)
+
+    return nodes
+
+def buildNodesLeast():
+    nodes = [Node(x) for x in range(NODES)]
+
+    # Layout active
+    distribution_circle = itertools.cycle(nodes)
+    for i in range(VBUCKETS):
+        next(distribution_circle).active.append(i)
+
+    # Layout replicas by sending each vbucket to the least loaded node.
+    for n in nodes:
+        for i in range(REPLICAS):
+            for v in n.active:
+                snodes = iter(sorted(nodes, cmp=lambda a, b: len(a.replica) - len(b.replica)))
+                target = next(snodes)
+                while v in target.active or v in target.replica:
+                    target = next(snodes)
+                target.replica.append(v)
 
     return nodes
 
@@ -141,12 +182,17 @@ def persistTest(db, nodes, nid, alg):
 
 if __name__ == '__main__':
     db = couchdb.Server('http://127.0.0.1:5984/')['test']
-    nodes = buildNodes()
+    algs = {
+        'least': buildNodesLeast,
+        'wide': buildNodesWide,
+        'adjacent': buildNodesAdjacent
+        }
+    nodes = algs[ALG]()
 
     nid = str(uuid.uuid1())
-    persistTest(db, nodes, nid, 'adjacent')
+    persistTest(db, nodes, nid, ALG)
 
     for i in range(NUM_TESTS):
-        simulate(db, nodes, nid, 'adjacent')
+        simulate(db, nodes, nid, ALG)
 
     db.update(SAVING)
