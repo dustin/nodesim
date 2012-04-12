@@ -17,9 +17,10 @@ function maybePercent(total, n) {
 function simUpdateSummaries(app) {
     var Mustache = app.require("vendor/couchapp/lib/mustache");
 
-    TMPL='(Data loss in {{failed}} cases, ' +
+    TMPL='(Data loss in {{failed}} ({{failedp}}) cases, ' +
         'between {{best_loss}} and {{worst_loss}} vbs lost.' +
         ' <span class="chartjunk"">{{sseq}}</span>)';
+    TMPL_NOLOSS='(No data loss detected.)';
 
     app.db.view('simulation/counts', {
         group: true,
@@ -38,7 +39,7 @@ function simUpdateSummaries(app) {
                         worst_loss: 0,
                         best_loss: 65536,
                         num_success: 0,
-                        seq: []
+                        missing: {}
                     };
                 }
                 summaries[uuid].total_runs += count;
@@ -49,16 +50,24 @@ function simUpdateSummaries(app) {
                 if (num_missing == 0) {
                     summaries[uuid].num_success += count;
                 } else {
-                    summaries[uuid].seq.push(count);
+                    summaries[uuid].missing[num_missing] =
+                        (summaries[uuid].missing[num_missing] || 0) + count;
                 }
             });
 
             for (var uuid in summaries) {
                 var s = summaries[uuid];
                 s.success = percentString(s.total_runs, s.num_success);
-                s.failed = percentString(s.total_runs, s.total_runs - s.num_success);
-                s.sseq = s.seq.join(',');
-                var summary = Mustache.to_html(TMPL, s);
+                s.failed = s.total_runs - s.num_success;
+                s.failedp = percentString(s.total_runs, s.failed);
+                var seq = [];
+                for (var i = s.best_loss; i <= s.worst_loss; i++) {
+                    if (s.missing[i]) {
+                        seq.push(s.missing[i]);
+                    }
+                }
+                s.sseq = seq.join(',');
+                var summary = Mustache.to_html(s.worst_loss == 0 ? TMPL_NOLOSS : TMPL, s);
                 $('#summary_' + uuid).html(summary);
             }
             junkify('chartjunk');

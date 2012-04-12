@@ -99,6 +99,9 @@ function(me, args) {
 
     showBar('fail_dist', failure_data, total_runs);
     showBar('loss_dist_chart', loss_dist_data, total_runs);
+    var loss_dist_data_no_zero = loss_dist_data.slice(0, loss_dist_data.length);
+    loss_dist_data_no_zero[0] = undefined;
+    showBar('loss_dist_chart_no_zero', loss_dist_data_no_zero, total_runs);
 
     for (var i = 0; i < failures.length; ++i) {
         if (failures[i]) {

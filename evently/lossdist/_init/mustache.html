@@ -1,8 +1,9 @@
 <p>
   We had a worst case of {{worst_loss}} lost vbuckets.  The following
-  chart shows the number of vbuckets lost across all tests:
+  chart shows the number of vbuckets lost across all tests (the second
+  chart only shows scenarios where data loss occurred):
 </p>
-<div id="loss_dist_chart"></div>
+<div id="loss_dist_chart"></div><div id="loss_dist_chart_no_zero"></div>
 
 {{#by_failures}}
 <h2>With {{size}} Nodes Failing</h2>
