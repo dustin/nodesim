@@ -67,18 +67,6 @@ function(me, args) {
         var x = pv.Scale.linear(0, max).range(0, h);
         var y = pv.Scale.ordinal(pv.range(labels.length)).splitBanded(0, w, 4/5);
 
-        function maybePercent(n) {
-            if (total) {
-                var percent = (100 * n) / total;
-                var integerPart = Math.floor(percent);
-                var decimalPart = Math.floor((percent - integerPart) * 100);
-                var pstring = integerPart + "." + decimalPart;
-                return " (" + pstring + "%)";
-            } else {
-                return "";
-            }
-        }
-
         var bar = vis.add(pv.Bar)
             .data(vals)
             .bottom(15)
@@ -99,7 +87,7 @@ function(me, args) {
             .textAlign("left")
             .textBaseline("middle")
             .textAngle(-Math.PI / 2)
-            .text(function() { return vals[this.index] + maybePercent(vals[this.index]); });
+            .text(function() { return vals[this.index] + maybePercent(total, vals[this.index]); });
 
         vis.add(pv.Rule)
             .bottom(15)

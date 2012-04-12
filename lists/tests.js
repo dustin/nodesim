@@ -1,7 +1,7 @@
 function(head, req) {
-    // !json templates.head
+    // !json templates.indexhead
     // !json templates.sim
-    // !json templates.tail
+    // !json templates.indextail
 
     provides("html", function() {
         var row;
@@ -14,7 +14,7 @@ function(head, req) {
         var Mustache = require("vendor/couchapp/lib/mustache");
         var path = require("vendor/couchapp/lib/path").init(req);
 
-        send(Mustache.to_html(templates.head, data));
+        send(Mustache.to_html(templates.indexhead, data));
         send("<h1>List of Simulations</h1><ul>");
 
         while(row = getRow()) {
@@ -29,6 +29,6 @@ function(head, req) {
             }));
         }
         send("</ul>");
-        send(Mustache.to_html(templates.tail, data));
+        send(Mustache.to_html(templates.indextail, data));
     });
 }
