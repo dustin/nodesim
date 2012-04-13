@@ -233,9 +233,9 @@ if __name__ == '__main__':
     nodes = ALGS[alg](num_nodes, vbuckets, replicas)
 
     nid = str(uuid.uuid1())
-    persistTest(db, num_tests, nodes, vbuckets, nid, ALG)
+    persistTest(db, num_tests, nodes, vbuckets, nid, alg)
 
     for i in range(num_tests):
-        simulate(db, nodes, replicas, vbuckets, nid, ALG)
+        simulate(db, nodes, replicas, vbuckets, nid, alg)
 
     db.update(SAVING)
