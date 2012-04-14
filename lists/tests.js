@@ -15,7 +15,6 @@ function(head, req) {
         var path = require("vendor/couchapp/lib/path").init(req);
 
         send(Mustache.to_html(templates.indexhead, data));
-        send("<h1>List of Simulations</h1><ul>");
 
         while(row = getRow()) {
             send(Mustache.to_html(templates.sim, {
@@ -28,7 +27,6 @@ function(head, req) {
                 show: path.show('test', row.value._id)
             }));
         }
-        send("</ul>");
         send(Mustache.to_html(templates.indextail, data));
     });
 }
