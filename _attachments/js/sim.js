@@ -17,10 +17,8 @@ function maybePercent(total, n) {
 function simUpdateSummaries(app) {
     var Mustache = app.require("vendor/couchapp/lib/mustache");
 
-    TMPL='(Data loss in {{failed}} ({{failedp}}) cases, ' +
-        'between {{best_loss}} and {{worst_loss}} vbs lost.' +
+    TMPL='between {{best_loss}} and {{worst_loss}} vbs' +
         ' <span class="chartjunk"">{{sseq}}</span>)';
-    TMPL_NOLOSS='(No data loss detected.)';
 
     app.db.view('simulation/counts', {
         group: true,
@@ -67,8 +65,13 @@ function simUpdateSummaries(app) {
                     }
                 }
                 s.sseq = seq.join(',');
-                var summary = Mustache.to_html(s.worst_loss == 0 ? TMPL_NOLOSS : TMPL, s);
-                $('#summary_' + uuid).html(summary);
+                if (s.worst_loss == 0) {
+                    $('#loss_' + uuid).html('<span class="noloss">0</span>');
+                    $('#vbloss_' + uuid).html("N/A");
+                } else {
+                    $('#loss_' + uuid).html(s.failed + " (" + s.failedp + ")");
+                    $('#vbloss_' + uuid).html(Mustache.to_html(TMPL, s));
+                }
             }
             junkify('chartjunk');
         }

@@ -1,5 +1,9 @@
-<li>
-  <a href="{{show}}">"{{alg}}" with a {{n_servers}} node cluster with
-    {{n_replicas}} replicas and {{n_iters}} iterations / {{started}}</a>
-  <span class="summary" id="summary_{{id}}"></span>
-</li>
+<tr>
+  <td>{{alg}}</td>
+  <td>{{n_servers}}</td>
+  <td>{{n_replicas}}</td>
+  <td>{{n_iters}}</td>
+  <td><a href="{{show}}">{{started}}</a></td>
+  <td id="loss_{{id}}"></td>
+  <td id="vbloss_{{id}}"></td>
+</tr>
