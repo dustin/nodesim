@@ -9,6 +9,7 @@
     couchapp_prefix_load("../../");
   </script>
   <script src="../../js/underscore-min.js"></script>
+  <script type="text/javascript" src="../../js/jquery.tablesorter.min.js"></script>
   <script src="../../js/sim.js"></script>
   <title>{{title}}</title>
   <style type="text/css">
@@ -19,7 +20,7 @@
 <div id="{{mainid}}">
 
 <h1>List of Simulations</h1>
-<table>
+<table id="simtable" class="tablesorter">
   <thead>
     <tr>
       <th>Algorithm</th>

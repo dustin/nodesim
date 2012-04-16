@@ -14,7 +14,7 @@ function maybePercent(total, n) {
 function simUpdateSummaries(app) {
     var Mustache = app.require("vendor/couchapp/lib/mustache");
 
-    TMPL='between {{best_loss}} and {{worst_loss}} vbs' +
+    TMPL='{{best_loss}} to {{worst_loss}} vbuckets' +
         ' <span class="chartjunk"">{{sseq}}</span>)';
 
     app.db.view('simulation/counts', {
@@ -71,6 +71,16 @@ function simUpdateSummaries(app) {
                 }
             }
             junkify('chartjunk');
+            $("#simtable").tablesorter({
+                headers: {
+                    5: {
+                        sorter: 'digit'
+                    },
+                    6: {
+                        sorter: 'digit'
+                    }
+                }
+            });
         }
     });
 
