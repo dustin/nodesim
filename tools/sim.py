@@ -161,7 +161,6 @@ def simulate(db, nodes, replicas, vbuckets, nid, alg):
         seen.extend(n.active)
         seen.extend(n.replica)
         fail[n.maybeFail()] += 1
-    print fail
     for v,vc in itertools.groupby(sorted(seen)):
         cnt = len(list(vc))
         assert cnt == (replicas + 1)
