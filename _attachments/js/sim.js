@@ -1,9 +1,6 @@
 function percentString(total, n) {
-    var percent = (100 * n) / total;
-    var integerPart = Math.floor(percent);
-    var decimalPart = Math.floor((percent - integerPart) * 100);
-    var pstring = integerPart + "." + decimalPart;
-    return pstring + "%";
+    var percent = 100 * (n / total);
+    return percent.toFixed(2) + "%";
 }
 
 function maybePercent(total, n) {
