@@ -15,7 +15,7 @@ function simUpdateSummaries(app) {
     var Mustache = app.require("vendor/couchapp/lib/mustache");
 
     TMPL='{{best_loss}} to {{worst_loss}} vbuckets' +
-        ' <span class="chartjunk"">{{sseq}}</span>)';
+        ' (<span class="chartjunk"">{{sseq}}</span>)';
 
     app.db.view('simulation/counts', {
         group: true,
